@@ -25,12 +25,7 @@ public class Admin {
     }
 
     public void handleDispute(Trip trip, String resolution) {
-        // Handle disputes
         System.out.println("Handling dispute for trip ID: " + trip.getId() + ". Resolution: " + resolution);
     }
 
-    public void viewMetrics() {
-        // View metrics on rides, payments, and user ratings
-        System.out.println("Viewing metrics...");
-    }
 }

@@ -9,7 +9,7 @@ public class Rider extends User {
         this.notificationService = notificationService;
     }
 
-    // Getter and setter for preferredPaymentMethod
+    // Getter and setters
     public PaymentMethod getPreferredPaymentMethod() {
         return preferredPaymentMethod;
     }
@@ -18,7 +18,6 @@ public class Rider extends User {
         this.preferredPaymentMethod = preferredPaymentMethod;
     }
 
-    // Getter for NotificationService
     public NotificationService getNotificationService() {
         return notificationService;
     }
@@ -71,7 +70,7 @@ public class Rider extends User {
         }
     }
 
-    // Simulate finding an available driver based on trip type and location
+    // Finding an available driver based on trip type and location
     private Driver findAvailableDriver(Trip trip) {
         // For simplicity, return a sample driver
         // Replace this with actual logic to find available drivers from a data source

@@ -21,7 +21,7 @@ public class Trip {
         this.notificationService = notificationService;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -113,7 +113,7 @@ public class Trip {
         }
     }
 
-    // Method to handle payment (abstracted to PaymentMethod interface)
+    // Method to handle payment processing
     public void processPayment(PaymentMethod paymentMethod) {
         if (paymentMethod != null) {
             paymentMethod.processPayment(fare);

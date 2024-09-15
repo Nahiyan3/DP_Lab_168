@@ -30,8 +30,8 @@ public class Main {
         // Test the Rider functionalities
         System.out.println("\nTesting Rider Functionality:");
         rider.requestRide(trip);
-        rider.rateDriver(driver, 5.0);
-        System.out.println("Rating after changing" + rider.getRating());
+        rider.rateDriver(driver, 3.5);
+        System.out.println("Rating after changing" + driver.getRating());
         rider.makePayment(20.0);
 
         // Test the Driver functionalities
@@ -48,6 +48,5 @@ public class Main {
         admin.manageRider(rider, true);
         admin.viewTripHistory(trip);
         admin.handleDispute(trip, "No issues reported.");
-        admin.viewMetrics();
     }
 }

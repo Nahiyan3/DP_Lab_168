@@ -50,7 +50,7 @@ public abstract class User {
         this.location = newLocation;
     }
 
-    // Abstract method for rating the user
+    // Method for rating the user
     public abstract void rateUser(double rating);
 }
 
