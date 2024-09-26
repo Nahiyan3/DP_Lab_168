@@ -1,5 +1,8 @@
+import java.util.Scanner;
+
 public class Rider extends User {
     private PaymentMethod preferredPaymentMethod;
+    private PaymentMethod paymentMethod;
     private NotificationService notificationService;
 
     // Constructor
@@ -8,6 +11,17 @@ public class Rider extends User {
         this.preferredPaymentMethod = preferredPaymentMethod;
         this.notificationService = notificationService;
     }
+
+    // Method to request a ride
+    public Trip requestRide(String pickupLocation, String dropOffLocation, RideType rideType) {
+        Trip trip = new Trip("trip1", rideType, notificationService);
+        trip.setPickupLocation(pickupLocation); // Set pickup location
+        trip.setDropOffLocation(dropOffLocation); // Set drop-off location
+        trip.setRider(this); // Set this rider for the trip
+        notificationService.sendNotification("Ride requested successfully from " + pickupLocation + " to " + dropOffLocation, this);
+        return trip; // Return the created trip
+    }
+
 
     // Getter and setters
     public PaymentMethod getPreferredPaymentMethod() {
@@ -22,12 +36,15 @@ public class Rider extends User {
         return notificationService;
     }
 
-    // Method to request a ride
+    // Method to request a ride with dynamic ride type selection
     public void requestRide(Trip trip) {
         if (trip == null) {
             System.out.println("Trip cannot be null.");
             return;
         }
+
+        // Set the rider for the trip
+        trip.setRider(this);
 
         // Find an available driver based on trip type and location
         Driver driver = findAvailableDriver(trip);
@@ -60,7 +77,38 @@ public class Rider extends User {
         }
     }
 
-    // Method to make payment
+    public void selectPaymentMethod(int choice) {
+        switch (choice) {
+            case 1:
+                this.paymentMethod = new CreditCardPayment();
+                System.out.println("Selected payment method: Credit Card");
+                break;
+            case 2:
+                this.paymentMethod = new DigitalWalletPayment();
+                System.out.println("Selected payment method: Digital Wallet");
+                break;
+            case 3:
+                this.paymentMethod = new PayPalPayment();
+                System.out.println("Selected payment method: PayPal");
+                break;
+            default:
+                System.out.println("Invalid choice. No payment method selected.");
+                this.paymentMethod = null; // Reset payment method if invalid choice
+        }
+    }
+
+    public void choosePaymentMethod() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Select Payment Method:");
+        System.out.println("1. Credit Card");
+        System.out.println("2. Digital Wallet");
+        System.out.println("3. PayPal");
+
+        int choice = scanner.nextInt();
+        selectPaymentMethod(choice);
+    }
+
+    // Method to make payment using the selected payment method
     public void makePayment(double amount) {
         if (preferredPaymentMethod != null) {
             preferredPaymentMethod.processPayment(amount);
@@ -74,7 +122,7 @@ public class Rider extends User {
     private Driver findAvailableDriver(Trip trip) {
         // For simplicity, return a sample driver
         // Replace this with actual logic to find available drivers from a data source
-        return new Driver("driver1", "John Doe", "car", "Sample Locations", 4.5, true, notificationService);
+        return new Driver("driver1", "John Doe", "car", "Sample Location", 4.5, true, notificationService);
     }
 
     @Override

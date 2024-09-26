@@ -14,29 +14,28 @@ public class Main {
         Driver driver = new Driver("driver1", "John Doe", "Car", "Downtown", 4.5, true, emailNotification);
         Rider rider = new Rider("rider1", "Jane Smith", "Uptown", 4.0, digitalWallet, smsNotification);
 
+        // Rider requests a ride
+        Trip trip = rider.requestRide("Uptown", "Downtown", RideType.CARPOOL);
 
-        // Create a Trip and set rider and driver
-        Trip trip = new Trip("trip1", "Uptown", "Downtown", RideType.CARPOOL, 10.0, inAppNotification);
-        trip.setRider(rider);  // Initialize rider for the trip
-        trip.setDriver(driver); // Initialize driver for the trip
+        // Assign driver to the trip
+        trip.assignDriver(driver);
 
         // Test the Trip functionalities
         System.out.println("Testing Trip Functionality:");
         trip.calculateFare();
-        trip.assignDriver(driver);
-        trip.processPayment(creditCard);
-        trip.completeTrip();
+        trip.startTrip(); // Start the trip
+        trip.completeTrip(); // Complete the trip
 
         // Test the Rider functionalities
         System.out.println("\nTesting Rider Functionality:");
-        rider.requestRide(trip);
         rider.rateDriver(driver, 3.5);
-        System.out.println("Rating after changing" + driver.getRating());
+        System.out.println("Rating after changing: " + driver.getRating());
+        rider.choosePaymentMethod(); // Example: selecting credit card payment
         rider.makePayment(20.0);
 
         // Test the Driver functionalities
         System.out.println("\nTesting Driver Functionality:");
-        driver.acceptRide();
+        driver.acceptRide(trip);
         driver.updateLocation("Midtown");
         driver.startTrip(trip);
         driver.rateRider(rider, 4.5);

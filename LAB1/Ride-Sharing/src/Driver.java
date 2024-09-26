@@ -24,9 +24,10 @@ public class Driver extends User {
     public void setAvailable(boolean availability) { this.availability = availability; }
 
     // Method to accept a ride
-    public void acceptRide() {
+    public void acceptRide(Trip trip) {
         if (availability) {
             this.availability = false; // Driver is no longer available
+            trip.assignDriver(this); // Assign this driver to the trip
             System.out.println("Driver accepted the ride.");
         } else {
             System.out.println("Driver is not available.");
@@ -59,8 +60,8 @@ public class Driver extends User {
             System.out.println("Trip started. Pickup location: " + trip.getPickupLocation());
 
             // Notify both rider and driver about the trip start
-            notificationService.sendNotification("Your trip has started. Pickup location: " + trip.getPickupLocation(), trip.getDriver());
-            notificationService.sendNotification("Driver has started the trip. Pickup location: " + trip.getPickupLocation(), trip.getDriver());
+            notificationService.sendNotification("Your trip has started. Pickup location: " + trip.getPickupLocation(), trip.getRider());
+            notificationService.sendNotification("Driver has started the trip. Pickup location: " + trip.getPickupLocation(), this);
         } else {
             System.out.println("Trip cannot be started. Either it's not assigned or invalid.");
         }

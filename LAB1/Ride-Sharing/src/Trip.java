@@ -3,7 +3,7 @@ public class Trip {
     private String pickupLocation;
     private String dropOffLocation;
     private RideType rideType;
-    private String status; // E.g., "Requested", "Driver Assigned", "Trip Started", "Completed"
+    private String status; // E.g., "Requested", "Driver Assigned", "Trip Started", "Completed", "Cancelled"
     private double fare;
     private double distance;
     private Driver driver;
@@ -11,47 +11,50 @@ public class Trip {
     private NotificationService notificationService;
 
     // Constructor
-    public Trip(String id, String pickupLocation, String dropOffLocation, RideType rideType, double distance, NotificationService notificationService) {
+    public Trip(String id, RideType rideType, NotificationService notificationService) {
         this.id = id;
-        this.pickupLocation = pickupLocation;
-        this.dropOffLocation = dropOffLocation;
         this.rideType = rideType;
         this.status = "Requested";
-        this.distance = distance;
         this.notificationService = notificationService;
     }
 
-    // Getters and setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    // Set pickup location and automatically calculate distance
+    public void setPickupLocation(String pickupLocation) {
+        this.pickupLocation = pickupLocation;
+        this.distance = calculateDistance(); // Example calculation, could be more complex
+    }
+
+    // Set drop-off location and recalculate distance if needed
+    public void setDropOffLocation(String dropOffLocation) {
+        this.dropOffLocation = dropOffLocation;
+        this.distance = calculateDistance(); // Example calculation, could be more complex
+    }
 
     public String getPickupLocation() { return pickupLocation; }
-    public void setPickupLocation(String pickupLocation) { this.pickupLocation = pickupLocation; }
-
     public String getDropOffLocation() { return dropOffLocation; }
-    public void setDropOffLocation(String dropOffLocation) { this.dropOffLocation = dropOffLocation; }
-
-    public RideType getRideType() { return rideType; }
-    public void setRideType(RideType rideType) { this.rideType = rideType; }
-
     public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
     public double getFare() { return fare; }
-    public void setFare(double fare) { this.fare = fare; }
+    public void setRider(Rider rider) {
+        this.rider = rider;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public double getDistance() { return distance; }
-    public void setDistance(double distance) { this.distance = distance; }
-
     public Driver getDriver() { return driver; }
-    public void setDriver(Driver driver) { this.driver = driver; }
-
     public Rider getRider() { return rider; }
-    public void setRider(Rider rider) { this.rider = rider; }
+
+    public String getId() {
+        return id;
+    }
+
+
+
 
     // Method to calculate fare based on distance and ride type
     public void calculateFare() {
-        // Simplified fare calculation logic
         double baseFare = 5.0;
         double perMileRate = 2.0;
 
@@ -78,16 +81,22 @@ public class Trip {
             this.driver = driver;
             this.status = "Driver Assigned";
             System.out.println("Driver assigned: " + driver.getName());
-
-            // Notify both rider and driver
-            if (rider != null) {
-                notificationService.sendNotification("Driver " + driver.getName() + " has been assigned to your trip.", rider);
-            } else {
-                System.out.println("Rider is not set.");
-            }
-            notificationService.sendNotification("You have been assigned a trip with rider: " + (rider != null ? rider.getName() : "Unknown"), driver);
+            notificationService.sendNotification("Driver " + driver.getName() + " has been assigned to your trip.", rider);
+            notificationService.sendNotification("You have been assigned a trip with rider: " + rider.getName(), driver);
         } else {
             System.out.println("Invalid driver.");
+        }
+    }
+
+    // Method to start the trip
+    public void startTrip() {
+        if (status.equals("Driver Assigned")) {
+            this.status = "Trip Started";
+            System.out.println("Trip started.");
+            notificationService.sendNotification("Your trip has started.", rider);
+            notificationService.sendNotification("Trip started with rider: " + rider.getName(), driver);
+        } else {
+            System.out.println("Trip cannot be started. Current status: " + status);
         }
     }
 
@@ -96,18 +105,8 @@ public class Trip {
         if (status.equals("Trip Started")) {
             this.status = "Completed";
             System.out.println("Trip completed.");
-
-            // Notify both rider and driver about the trip completion
-            if (rider != null) {
-                notificationService.sendNotification("Your trip has been completed. Fare: " + fare, rider);
-            } else {
-                System.out.println("Rider is not set.");
-            }
-            if (driver != null) {
-                notificationService.sendNotification("Trip with rider " + (rider != null ? rider.getName() : "Unknown") + " has been completed. Fare: " + fare, driver);
-            } else {
-                System.out.println("Driver is not set.");
-            }
+            notificationService.sendNotification("Your trip has been completed. Fare: " + fare, rider);
+            notificationService.sendNotification("Trip with rider " + rider.getName() + " has been completed. Fare: " + fare, driver);
         } else {
             System.out.println("Trip cannot be completed. Current status: " + status);
         }
@@ -118,8 +117,33 @@ public class Trip {
         if (paymentMethod != null) {
             paymentMethod.processPayment(fare);
             System.out.println("Payment processed. Fare: " + fare);
+            notificationService.sendNotification("Payment processed successfully. Fare: " + fare, rider);
+            notificationService.sendNotification("Payment for the trip has been processed. Fare: " + fare, driver);
         } else {
             System.out.println("Invalid payment method.");
         }
+    }
+
+    // Method to cancel the trip
+    public void cancelTrip() {
+        if (status.equals("Requested") || status.equals("Driver Assigned")) {
+            this.status = "Cancelled";
+            System.out.println("Trip cancelled.");
+            notificationService.sendNotification("Your trip has been cancelled.", rider);
+            notificationService.sendNotification("The trip has been cancelled.", driver);
+        } else {
+            System.out.println("Trip cannot be cancelled. Current status: " + status);
+        }
+    }
+
+    // Method to update the trip status
+    public void updateStatus(String newStatus) {
+        this.status = newStatus;
+        System.out.println("Trip status updated to: " + status);
+    }
+
+    private double calculateDistance() {
+        // This is a placeholder. You may replace it with actual distance calculation logic based on locations.
+        return 10.0; // Assume a fixed distance for now.
     }
 }
