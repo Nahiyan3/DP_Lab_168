@@ -15,11 +15,11 @@ public class Rider extends User {
     // Method to request a ride
     public Trip requestRide(String pickupLocation, String dropOffLocation, RideType rideType) {
         Trip trip = new Trip("trip1", rideType, notificationService);
-        trip.setPickupLocation(pickupLocation); // Set pickup location
-        trip.setDropOffLocation(dropOffLocation); // Set drop-off location
-        trip.setRider(this); // Set this rider for the trip
+        trip.setPickupLocation(pickupLocation);
+        trip.setDropOffLocation(dropOffLocation);
+        trip.setRider(this);
         notificationService.sendNotification("Ride requested successfully from " + pickupLocation + " to " + dropOffLocation, this);
-        return trip; // Return the created trip
+        return trip;
     }
 
 
@@ -120,8 +120,7 @@ public class Rider extends User {
 
     // Finding an available driver based on trip type and location
     private Driver findAvailableDriver(Trip trip) {
-        // For simplicity, return a sample driver
-        // Replace this with actual logic to find available drivers from a data source
+
         return new Driver("driver1", "John Doe", "car", "Sample Location", 4.5, true, notificationService);
     }
 

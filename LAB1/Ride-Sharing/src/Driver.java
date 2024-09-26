@@ -37,7 +37,7 @@ public class Driver extends User {
     // Method to rate a rider
     public void rateRider(Rider rider, double rating) {
         if (rider != null && rating >= 1 && rating <= 5) {
-            rider.rateUser(rating); // Assume the Rider class has a rateUser method
+            rider.rateUser(rating);
             System.out.println("Rated rider " + rider.getName() + " with rating " + rating);
 
             // Notify the rider about the rating

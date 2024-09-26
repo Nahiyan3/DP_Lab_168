@@ -30,7 +30,7 @@ public class Main {
         System.out.println("\nTesting Rider Functionality:");
         rider.rateDriver(driver, 3.5);
         System.out.println("Rating after changing: " + driver.getRating());
-        rider.choosePaymentMethod(); // Example: selecting credit card payment
+        rider.choosePaymentMethod();
         rider.makePayment(20.0);
 
         // Test the Driver functionalities

@@ -21,13 +21,13 @@ public class Trip {
     // Set pickup location and automatically calculate distance
     public void setPickupLocation(String pickupLocation) {
         this.pickupLocation = pickupLocation;
-        this.distance = calculateDistance(); // Example calculation, could be more complex
+        this.distance = calculateDistance();
     }
 
     // Set drop-off location and recalculate distance if needed
     public void setDropOffLocation(String dropOffLocation) {
         this.dropOffLocation = dropOffLocation;
-        this.distance = calculateDistance(); // Example calculation, could be more complex
+        this.distance = calculateDistance();
     }
 
     public String getPickupLocation() { return pickupLocation; }
@@ -143,7 +143,7 @@ public class Trip {
     }
 
     private double calculateDistance() {
-        // This is a placeholder. You may replace it with actual distance calculation logic based on locations.
-        return 10.0; // Assume a fixed distance for now.
+
+        return 10.0; // Assuming a fixed distance for now.
     }
 }
